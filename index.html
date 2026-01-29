@@ -1,0 +1,109 @@
+<!doctype html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Twelve of 7 Bakeology | Custom Cakes & Flame Cakes</title>
+
+  <!-- Tailwind config must come BEFORE the CDN so the CDN reads it -->
+  <script id="tailwind-config">
+    tailwind = window.tailwind || {};
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#ec4699",
+            "background-light": "#fcf8f6",
+            "background-dark": "#211119",
+            "accent-blue": "#e0f2fe",
+            "accent-pink": "#fce7f3",
+            "accent-peach": "#ffedd5"
+          },
+          fontFamily: { "display": ["Plus Jakarta Sans", "sans-serif"] },
+          borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }
+        }
+      }
+    };
+  </script>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+  <style>
+    .glass-nav { background: rgba(252, 248, 246, 0.8); backdrop-filter: blur(12px); }
+    .whatsapp-float { position: fixed; bottom: 2rem; right: 2rem; z-index: 100; }
+    #instagram-embed { max-width: 640px; margin: 0 auto; }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#1b0e14] dark:text-white transition-colors duration-300">
+  <!-- Floating WhatsApp Button -->
+  <a id="whatsapp-link" class="whatsapp-float flex items-center justify-center size-16 bg-[#25D366] text-white rounded-full shadow-2xl hover:scale-110 transition-transform" href="#" target="_blank" aria-label="Chat on WhatsApp">
+    <svg class="size-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382 ..."></path></svg>
+  </a>
+
+  <!-- (rest of your page content unchanged) -->
+  <!-- Put your full page HTML here; ensure there are no '[...]' placeholders. -->
+
+  <script>
+    // DOM elements (ensure IDs exist in your HTML)
+    const languageSelect = document.getElementById("language-select");
+    const whatsappLink = document.getElementById("whatsapp-link");
+    const chatCustomize = document.getElementById("chat-customize");
+    const startOrder = document.getElementById("start-order");
+    const openGallery = document.getElementById("open-gallery");
+
+    // Minimal safety: check for missing elements before using
+    const translations = { en: { whatsappMessage: "Hi! I'd like to customize a cake order." } };
+
+    const setAssetBackgrounds = () => {
+      document.querySelectorAll("[data-local]").forEach((card) => {
+        const localSrc = card.getAttribute("data-local");
+        const fallback = card.getAttribute("data-fallback");
+        if (!localSrc) return;
+        const image = new Image();
+        image.onload = () => card.style.backgroundImage = `url('${localSrc}')`;
+        image.onerror = () => { if (fallback) card.style.backgroundImage = `url('${fallback}')`; };
+        image.src = localSrc;
+      });
+    };
+
+    const updateWhatsAppLink = (locale) => {
+      const message = (translations[locale] && translations[locale].whatsappMessage) || translations.en.whatsappMessage;
+      const text = encodeURIComponent(message);
+      if (whatsappLink) whatsappLink.href = `https://wa.me/15557771207?text=${text}`;
+    };
+
+    const initLanguageSwitcher = () => {
+      if (!languageSelect) return;
+      const saved = localStorage.getItem("preferredLanguage");
+      const defaultLocale = saved && translations[saved] ? saved : "en";
+      languageSelect.value = defaultLocale;
+      updateWhatsAppLink(defaultLocale);
+      languageSelect.addEventListener("change", (e) => {
+        const locale = e.target.value;
+        localStorage.setItem("preferredLanguage", locale);
+        updateWhatsAppLink(locale);
+      });
+    };
+
+    const initButtons = () => {
+      const openWhatsApp = () => {
+        if (whatsappLink && whatsappLink.href && !whatsappLink.href.endsWith("#")) {
+          window.open(whatsappLink.href, "_blank", "noopener,noreferrer");
+        }
+      };
+      if (chatCustomize) chatCustomize.addEventListener("click", openWhatsApp);
+      if (startOrder) startOrder.addEventListener("click", openWhatsApp);
+      if (openGallery) openGallery.addEventListener("click", () => document.getElementById("gallery")?.scrollIntoView({ behavior: "smooth" }));
+    };
+
+    setAssetBackgrounds();
+    initLanguageSwitcher();
+    initButtons();
+  </script>
+</body>
+</html>
