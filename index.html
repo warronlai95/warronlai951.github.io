@@ -27,7 +27,7 @@
     };
   </script>
 
-  <!-- Tailwind CDN -->
+  <!-- Tailwind CDN (OK for quick testing; consider building via Tailwind CLI / PostCSS for production) -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
@@ -41,56 +41,334 @@
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-[#1b0e14] dark:text-white transition-colors duration-300">
   <!-- Floating WhatsApp Button -->
-  <a id="whatsapp-link" class="whatsapp-float flex items-center justify-center size-16 bg-[#25D366] text-white rounded-full shadow-2xl hover:scale-110 transition-transform" href="#" target="_blank" aria-label="Chat on WhatsApp">
-    <svg class="size-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382 ..."></path></svg>
+  <a id="whatsapp-link" class="whatsapp-float flex items-center justify-center w-16 h-16 bg-[#25D366] text-white rounded-full shadow-2xl hover:scale-110 transition-transform" href="https://wa.me/15557771207?text=Hi%21%20I'd%20like%20to%20customize%20a%20cake." target="_blank" aria-label="Chat on WhatsApp" rel="noopener noreferrer">
+    <!-- Use Material Symbol to avoid malformed SVG path -->
+    <span class="material-symbols-outlined" aria-hidden="true">chat</span>
   </a>
 
-  <!-- (rest of your page content unchanged) -->
-  <!-- Put your full page HTML here; ensure there are no '[...]' placeholders. -->
+  <!-- Top Navigation Bar -->
+  <div class="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-[#f3e7ed] dark:border-white/10">
+    <header class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+      <div class="flex items-center gap-3">
+        <div class="bg-primary text-white p-2 rounded-full flex items-center justify-center">
+          <span class="material-symbols-outlined" aria-hidden="true">cake</span>
+        </div>
+        <h1 class="text-xl font-extrabold tracking-tight">Twelve of 7 <span class="text-primary">Bakeology</span></h1>
+      </div>
+      <nav class="hidden md:flex items-center gap-8">
+        <a class="text-sm font-semibold hover:text-primary transition-colors" href="#process" data-i18n="nav.process">Process</a>
+        <a class="text-sm font-semibold hover:text-primary transition-colors" href="#gallery" data-i18n="nav.gallery">Gallery</a>
+        <a class="text-sm font-semibold hover:text-primary transition-colors" href="#flame" data-i18n="nav.flame">Flame Cakes</a>
+        <a class="text-sm font-semibold hover:text-primary transition-colors" href="#testimonials" data-i18n="nav.reviews">Reviews</a>
+      </nav>
+      <div class="flex items-center gap-4">
+        <div class="hidden sm:flex items-center gap-2 text-xs font-semibold text-[#994d73] dark:text-white/70">
+          <label for="language-select" class="sr-only" data-i18n="nav.languageLabel">Language</label>
+          <span data-i18n="nav.languageLabel">Language</span>
+          <select id="language-select" class="rounded-full border border-[#e7d0db] bg-white px-3 py-2 text-xs font-semibold text-[#1b0e14] shadow-sm focus:border-primary focus:outline-none">
+            <option value="en">English</option>
+            <option value="zh">中文</option>
+            <option value="ms">Bahasa Melayu</option>
+          </select>
+        </div>
+        <button id="chat-customize" class="bg-primary text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-lg shadow-primary/20 hover:scale-105 transition-all" data-i18n="nav.chat">
+          Chat to customise
+        </button>
+      </div>
+    </header>
+  </div>
 
+  <main class="pt-24">
+    <!-- Hero Section -->
+    <section class="max-w-7xl mx-auto px-6 py-12 md:py-20 overflow-hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="flex flex-col gap-8">
+          <div class="inline-flex items-center px-4 py-1 rounded-full bg-accent-pink text-primary text-xs font-bold uppercase tracking-wider w-fit" data-i18n="hero.badge">
+            Artisanal &amp; Custom Made
+          </div>
+          <h1 class="text-5xl md:text-7xl font-black leading-[1.1] tracking-tight text-[#1b0e14] dark:text-white" data-i18n="hero.title">
+            Your wildest ideas, <br/><span class="text-primary italic" data-i18n="hero.titleAccent">baked into reality 🎂</span>
+          </h1>
+          <p class="text-lg text-[#994d73] dark:text-white/70 leading-relaxed max-w-lg" data-i18n="hero.subtitle">
+            Custom-made artisanal cakes for birthdays, weddings, and every sweet moment in between. Handcrafted with love and the finest ingredients in our boutique kitchen.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <button id="start-order" class="bg-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-[#d93a88] transition-colors shadow-xl" data-i18n="hero.startOrder">
+              Start Your Order
+            </button>
+            <button id="open-gallery" class="bg-white dark:bg-white/10 border border-[#e7d0db] dark:border-white/20 px-8 py-4 rounded-full font-bold text-lg hover:bg-background-light transition-colors" data-i18n="hero.viewGallery">
+              View Gallery
+            </button>
+          </div>
+        </div>
+
+        <!-- Right side: grid of images (prefer local assets but fallback to placeholders) -->
+        <div class="relative grid grid-cols-2 gap-4" id="hero-gallery">
+          <div class="flex flex-col gap-4 mt-8">
+            <div class="aspect-[4/5] bg-cover bg-center rounded-xl shadow-2xl"
+                 data-local="assets/instagram.jpg"
+                 data-fallback="https://via.placeholder.com/640x800.png?text=Instagram+Image"
+                 aria-label="Stunning pink floral tiered birthday cake"></div>
+
+            <div class="aspect-square bg-cover bg-center rounded-xl shadow-2xl"
+                 data-local="assets/gallery1.jpg"
+                 data-fallback="https://via.placeholder.com/640.png?text=Gallery+1"
+                 aria-label="Detailed close up of wedding cake frosting"></div>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <div class="aspect-square bg-cover bg-center rounded-xl shadow-2xl"
+                 data-local="assets/gallery2.jpg"
+                 data-fallback="https://via.placeholder.com/640.png?text=Gallery+2"
+                 aria-label="Modern geometric patterned blue cake"></div>
+
+            <div class="aspect-[4/5] bg-cover bg-center rounded-xl shadow-2xl"
+                 data-local="assets/gallery3.jpg"
+                 data-fallback="https://via.placeholder.com/640x800.png?text=Gallery+3"
+                 aria-label="Minimalist elegant white cake with pearls"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Instagram embed area (OPTIONAL) -->
+    <section id="instagram-embed-section" class="max-w-3xl mx-auto px-6 pb-8">
+      <div id="instagram-embed" class="prose mx-auto"></div>
+    </section>
+
+    <!-- Simple Process Section -->
+    <section id="process" class="bg-white dark:bg-white/5 py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold mb-4" data-i18n="process.title">Simple Process</h2>
+          <p class="text-[#994d73] dark:text-white/60" data-i18n="process.subtitle">Ordering your dream cake is as easy as 1, 2, 3</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="flex flex-col items-center text-center p-8 rounded-lg bg-accent-peach dark:bg-white/5 group hover:scale-105 transition-transform">
+            <div class="w-16 h-16 rounded-full bg-orange-400 text-white flex items-center justify-center mb-6 shadow-lg shadow-orange-200">
+              <span class="material-symbols-outlined text-3xl">photo_camera</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2" data-i18n="process.step1.title">Send us a pic</h3>
+            <p class="text-sm text-[#994d73] dark:text-white/60 leading-relaxed" data-i18n="process.step1.desc">Share your inspiration, Pinterest board, or even a napkin sketch with us via WhatsApp.</p>
+          </div>
+
+          <div class="flex flex-col items-center text-center p-8 rounded-lg bg-accent-blue dark:bg-white/5 group hover:scale-105 transition-transform">
+            <div class="w-16 h-16 rounded-full bg-blue-400 text-white flex items-center justify-center mb-6 shadow-lg shadow-blue-200">
+              <span class="material-symbols-outlined text-3xl">restaurant_menu</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2" data-i18n="process.step2.title">Pick your flavors</h3>
+            <p class="text-sm text-[#994d73] dark:text-white/60 leading-relaxed" data-i18n="process.step2.desc">Choose from our 15+ premium range of sponges, artisanal fillings, and velvet buttercreams.</p>
+          </div>
+
+          <div class="flex flex-col items-center text-center p-8 rounded-lg bg-accent-pink dark:bg-white/5 group hover:scale-105 transition-transform">
+            <div class="w-16 h-16 rounded-full bg-primary text-white flex items-center justify-center mb-6 shadow-lg shadow-pink-200">
+              <span class="material-symbols-outlined text-3xl">celebration</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2" data-i18n="process.step3.title">Pick up & Party</h3>
+            <p class="text-sm text-[#994d73] dark:text-white/60 leading-relaxed" data-i18n="process.step3.desc">Collect your handcrafted masterpiece and let the celebration begin with your loved ones!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="max-w-7xl mx-auto px-6 py-24">
+      <div class="flex items-end justify-between mb-12">
+        <div>
+          <h2 class="text-3xl font-bold mb-2" data-i18n="gallery.title">Fresh from the Oven</h2>
+          <p class="text-[#994d73] dark:text-white/60" data-i18n="gallery.subtitle">Our latest creations, ready for your celebration.</p>
+        </div>
+        <button class="hidden md:block text-primary font-bold hover:underline" data-i18n="gallery.viewAll">View All Gallery</button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Card 1 -->
+        <div class="bg-white dark:bg-white/5 rounded-lg overflow-hidden border border-[#f3e7ed] dark:border-white/10 group">
+          <div class="aspect-square bg-cover bg-center overflow-hidden"
+               data-local="assets/gallery-card-1.jpg"
+               data-fallback="https://via.placeholder.com/640.png?text=Card+1"
+               aria-label="Mermaid Fantasy"></div>
+          <div class="p-6">
+            <div class="flex gap-2 mb-3">
+              <span class="px-3 py-1 bg-accent-blue text-blue-600 rounded-full text-[10px] font-bold uppercase" data-i18n="gallery.tags.whimsical">Whimsical</span>
+              <span class="px-3 py-1 bg-accent-pink text-primary rounded-full text-[10px] font-bold uppercase" data-i18n="gallery.tags.birthday">Birthday</span>
+            </div>
+            <h4 class="text-xl font-bold mb-4" data-i18n="gallery.card1.title">Mermaid Fantasy</h4>
+            <button class="w-full flex items-center justify-center gap-2 py-3 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary hover:text-white transition-all" data-i18n="gallery.askButton">
+              <span class="material-symbols-outlined text-lg">chat</span> Ask about this cake
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white dark:bg-white/5 rounded-lg overflow-hidden border border-[#f3e7ed] dark:border-white/10 group">
+          <div class="aspect-square bg-cover bg-center overflow-hidden"
+               data-local="assets/gallery-card-2.jpg"
+               data-fallback="https://via.placeholder.com/640.png?text=Card+2"
+               aria-label="Retro Vintage Piping"></div>
+          <div class="p-6">
+            <div class="flex gap-2 mb-3">
+              <span class="px-3 py-1 bg-accent-peach text-orange-600 rounded-full text-[10px] font-bold uppercase" data-i18n="gallery.tags.classic">Classic</span>
+              <span class="px-3 py-1 bg-accent-pink text-primary rounded-full text-[10px] font-bold uppercase" data-i18n="gallery.tags.vintage">Vintage</span>
+            </div>
+            <h4 class="text-xl font-bold mb-4" data-i18n="gallery.card2.title">Retro Vintage Piping</h4>
+            <button class="w-full flex items-center justify-center gap-2 py-3 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary hover:text-white transition-all" data-i18n="gallery.askButton">
+              <span class="material-symbols-outlined text-lg">chat</span> Ask about this cake
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white dark:bg-white/5 rounded-lg overflow-hidden border border-[#f3e7ed] dark:border-white/10 group">
+          <div class="aspect-square bg-cover bg-center overflow-hidden"
+               data-local="assets/gallery-card-3.jpg"
+               data-fallback="https://via.placeholder.com/640.png?text=Card+3"
+               aria-label="Chocolate Gold Drip"></div>
+          <div class="p-6">
+            <div class="flex gap-2 mb-3">
+              <span class="px-3 py-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 rounded-full text-[10px] font-bold uppercase" data-i18n="gallery.tags.modern">Modern</span>
+              <span class="px-3 py-1 bg-accent-pink text-primary rounded-full text-[10px] font-bold uppercase" data-i18n="gallery.tags.luxury">Luxury</span>
+            </div>
+            <h4 class="text-xl font-bold mb-4" data-i18n="gallery.card3.title">Chocolate Gold Drip</h4>
+            <button class="w-full flex items-center justify-center gap-2 py-3 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary hover:text-white transition-all" data-i18n="gallery.askButton">
+              <span class="material-symbols-outlined text-lg">chat</span> Ask about this cake
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- (additional sections like Flame Cakes, Testimonials, CTA, Footer) -->
+  </main>
+
+  <footer class="bg-background-dark text-white py-16 px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div class="col-span-1 md:col-span-1">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="bg-primary text-white p-2 rounded-full flex items-center justify-center">
+            <span class="material-symbols-outlined">cake</span>
+          </div>
+          <h1 class="text-xl font-extrabold tracking-tight">Twelve of 7 <span class="text-primary">Bakeology</span></h1>
+        </div>
+        <p class="text-white/60 text-sm leading-relaxed mb-6" data-i18n="footer.tagline">
+          Baking memories since 2017. Custom cakes for the dreamers, the lovers, and the party makers.
+        </p>
+        <div class="flex gap-4">
+          <a class="w-10 h-10 bg-white/5 flex items-center justify-center rounded-full hover:bg-primary transition-colors" href="#"><span class="material-symbols-outlined text-lg">share</span></a>
+          <a class="w-10 h-10 bg-white/5 flex items-center justify-center rounded-full hover:bg-primary transition-colors" href="#"><span class="material-symbols-outlined text-lg">photo_camera</span></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="font-bold mb-6 text-lg" data-i18n="footer.quickLinks">Quick Links</h4>
+        <ul class="space-y-4 text-white/60">
+          <li><a class="hover:text-primary" href="#" data-i18n="footer.links.home">Home</a></li>
+          <li><a class="hover:text-primary" href="#gallery" data-i18n="footer.links.gallery">Gallery</a></li>
+          <li><a class="hover:text-primary" href="#flame" data-i18n="footer.links.flame">Flame Cakes</a></li>
+          <li><a class="hover:text-primary" href="#process" data-i18n="footer.links.customOrders">Custom Orders</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold mb-6 text-lg" data-i18n="footer.support">Support</h4>
+        <ul class="space-y-4 text-white/60">
+          <li><a class="hover:text-primary" href="#" data-i18n="footer.supportLinks.faq">FAQ</a></li>
+          <li><a class="hover:text-primary" href="#" data-i18n="footer.supportLinks.care">Care Instructions</a></li>
+          <li><a class="hover:text-primary" href="#" data-i18n="footer.supportLinks.flavors">Flavors &amp; Fillings</a></li>
+          <li><a class="hover:text-primary" href="#" data-i18n="footer.supportLinks.contact">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold mb-6 text-lg" data-i18n="footer.contact">Contact</h4>
+        <ul class="space-y-4 text-white/60">
+          <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">location_on</span><span data-i18n="footer.contactDetails.address">Downtown Arts District, Studio 12</span></li>
+          <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">phone_iphone</span><span>+1 (555) 777-1207</span></li>
+          <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">mail</span><span>hello@twelveof7.com</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto pt-16 mt-16 border-t border-white/10 text-center text-white/40 text-xs">
+      <p data-i18n="footer.copyright">© 2026 Twelve of 7 Bakeology. All rights reserved. Handcrafted with love.</p>
+    </div>
+  </footer>
+
+  <!-- Main script that prefers local assets but falls back to external placeholders.
+       It wires up the WhatsApp and buttons. -->
   <script>
-    // DOM elements (ensure IDs exist in your HTML)
     const languageSelect = document.getElementById("language-select");
     const whatsappLink = document.getElementById("whatsapp-link");
     const chatCustomize = document.getElementById("chat-customize");
     const startOrder = document.getElementById("start-order");
     const openGallery = document.getElementById("open-gallery");
 
-    // Minimal safety: check for missing elements before using
-    const translations = { en: { whatsappMessage: "Hi! I'd like to customize a cake order." } };
+    const translations = {
+      en: {
+        whatsappMessage: "Hi! I'd like to customize a cake order.",
+        "nav.process": "Process",
+        "nav.gallery": "Gallery",
+        "nav.flame": "Flame Cakes",
+        "nav.reviews": "Reviews",
+        "nav.languageLabel": "Language",
+        "nav.chat": "Chat to customise",
+        "hero.badge": "Artisanal & Custom Made",
+        "hero.title": "Your wildest ideas, <br/><span class=\"text-primary italic\">baked into reality 🎂</span>",
+        "hero.titleAccent": "baked into reality 🎂",
+        "hero.subtitle": "Custom-made artisanal cakes for birthdays, weddings, and every sweet moment in between."
+      },
+      zh: { whatsappMessage: "你好！我想订制蛋糕。" },
+      ms: { whatsappMessage: "Hai! Saya ingin membuat tempahan kek khas." }
+    };
 
-    const setAssetBackgrounds = () => {
-      document.querySelectorAll("[data-local]").forEach((card) => {
-        const localSrc = card.getAttribute("data-local");
-        const fallback = card.getAttribute("data-fallback");
-        if (!localSrc) return;
-        const image = new Image();
-        image.onload = () => card.style.backgroundImage = `url('${localSrc}')`;
-        image.onerror = () => { if (fallback) card.style.backgroundImage = `url('${fallback}')`; };
-        image.src = localSrc;
+    function setAssetBackgrounds() {
+      document.querySelectorAll("[data-local]").forEach((el) => {
+        const local = el.getAttribute("data-local");
+        const fallback = el.getAttribute("data-fallback");
+        if (!local) {
+          if (fallback) el.style.backgroundImage = `url('${fallback}')`;
+          return;
+        }
+        const img = new Image();
+        img.onload = () => el.style.backgroundImage = `url('${local}')`;
+        img.onerror = () => { if (fallback) el.style.backgroundImage = `url('${fallback}')`; };
+        img.src = local;
       });
-    };
+    }
 
-    const updateWhatsAppLink = (locale) => {
-      const message = (translations[locale] && translations[locale].whatsappMessage) || translations.en.whatsappMessage;
-      const text = encodeURIComponent(message);
+    function updateWhatsAppLink(locale) {
+      const msg = translations[locale]?.whatsappMessage || translations.en.whatsappMessage;
+      const text = encodeURIComponent(msg);
       if (whatsappLink) whatsappLink.href = `https://wa.me/15557771207?text=${text}`;
-    };
+    }
 
-    const initLanguageSwitcher = () => {
+    function applyTranslations(locale) {
+      const dict = translations[locale] || translations.en;
+      document.documentElement.lang = locale === "zh" ? "zh" : locale === "ms" ? "ms" : "en";
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        const key = node.getAttribute("data-i18n");
+        const value = dict[key];
+        if (!value) return;
+        if (value.includes("<") && value.includes(">")) node.innerHTML = value;
+        else node.textContent = value;
+      });
+      updateWhatsAppLink(locale);
+    }
+
+    function initLanguageSwitcher() {
       if (!languageSelect) return;
       const saved = localStorage.getItem("preferredLanguage");
       const defaultLocale = saved && translations[saved] ? saved : "en";
       languageSelect.value = defaultLocale;
-      updateWhatsAppLink(defaultLocale);
+      applyTranslations(defaultLocale);
       languageSelect.addEventListener("change", (e) => {
         const locale = e.target.value;
         localStorage.setItem("preferredLanguage", locale);
-        updateWhatsAppLink(locale);
+        applyTranslations(locale);
       });
-    };
+    }
 
-    const initButtons = () => {
+    function initButtons() {
       const openWhatsApp = () => {
         if (whatsappLink && whatsappLink.href && !whatsappLink.href.endsWith("#")) {
           window.open(whatsappLink.href, "_blank", "noopener,noreferrer");
@@ -99,8 +377,9 @@
       if (chatCustomize) chatCustomize.addEventListener("click", openWhatsApp);
       if (startOrder) startOrder.addEventListener("click", openWhatsApp);
       if (openGallery) openGallery.addEventListener("click", () => document.getElementById("gallery")?.scrollIntoView({ behavior: "smooth" }));
-    };
+    }
 
+    // init
     setAssetBackgrounds();
     initLanguageSwitcher();
     initButtons();
